@@ -62,7 +62,7 @@ export default function Home() {
       setLoadingGreeting(false);
     }
   }
-  // Handling exit
+
   function handleExitClose() {
     setMessages([]);
     setInput("");
@@ -179,7 +179,7 @@ export default function Home() {
 
         {/* Wrap up button */}
         <AnimatePresence>
-          {messages.length >= 6 && (
+          {messages.length >= 6 && !showExitRitual && (
             <motion.button
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
@@ -206,99 +206,102 @@ export default function Home() {
         </AnimatePresence>
       </div>
 
-      {/* Chat area */}
+      {/* Chat area — hidden when exit ritual is open */}
       <div style={{ flex: 1, overflowY: "auto", padding: "0 16px 16px" }}>
         <div style={{ maxWidth: "640px", margin: "0 auto", width: "100%" }}>
-
-          {loadingGreeting && <TypingIndicator />}
-
-          <AnimatePresence>
-            {messages.map((msg, i) => (
-              <ChatMessage
-                key={i}
-                role={msg.role}
-                content={msg.content}
-                showAvatar={shouldShowAvatar(i)}
-              />
-            ))}
-          </AnimatePresence>
-
-          {isTyping && <TypingIndicator />}
+          {!showExitRitual && (
+            <>
+              {loadingGreeting && <TypingIndicator />}
+              <AnimatePresence>
+                {messages.map((msg, i) => (
+                  <ChatMessage
+                    key={i}
+                    role={msg.role}
+                    content={msg.content}
+                    showAvatar={shouldShowAvatar(i)}
+                  />
+                ))}
+              </AnimatePresence>
+              {isTyping && <TypingIndicator />}
+            </>
+          )}
           <div ref={bottomRef} />
         </div>
       </div>
 
-      {/* Input bar */}
-      <div style={{ flexShrink: 0, padding: "0 16px 90px" }}>
-        <div style={{ maxWidth: "640px", margin: "0 auto", width: "100%" }}>
-          <div style={{
-            display: "flex",
-            alignItems: "flex-end",
-            gap: "12px",
-            padding: "12px 16px",
-            borderRadius: "16px",
-            background: "rgba(255, 255, 255, 0.04)",
-            border: "1px solid rgba(255, 255, 255, 0.12)",
-            backdropFilter: "blur(12px)",
-          }}>
-            <textarea
-              ref={textareaRef}
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={handleKeyDown}
-              placeholder="Share what's on your mind..."
-              rows={1}
-              style={{
-                flex: 1,
-                background: "transparent",
-                border: "none",
-                outline: "none",
-                resize: "none",
-                color: "#e2e8f0",
-                fontSize: "14px",
-                lineHeight: "1.6",
-                minHeight: "24px",
-                maxHeight: "120px",
-                fontFamily: "inherit",
-              }}
-            />
-            <motion.button
-              onClick={sendMessage}
-              disabled={!input.trim() || isTyping}
-              whileTap={{ scale: 0.92 }}
-              style={{
-                flexShrink: 0,
-                width: "32px",
-                height: "32px",
-                borderRadius: "10px",
-                background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
-                border: "none",
-                cursor: !input.trim() || isTyping ? "not-allowed" : "pointer",
-                opacity: !input.trim() || isTyping ? 0.3 : 1,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                marginBottom: "2px",
-                transition: "opacity 0.2s",
-              }}
-            >
-              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="white" strokeWidth={2.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
-              </svg>
-            </motion.button>
-          </div>
+      {/* Input bar — hidden when exit ritual is open */}
+      {!showExitRitual && (
+        <div style={{ flexShrink: 0, padding: "0 16px 90px" }}>
+          <div style={{ maxWidth: "640px", margin: "0 auto", width: "100%" }}>
+            <div style={{
+              display: "flex",
+              alignItems: "flex-end",
+              gap: "12px",
+              padding: "12px 16px",
+              borderRadius: "16px",
+              background: "rgba(255, 255, 255, 0.04)",
+              border: "1px solid rgba(255, 255, 255, 0.12)",
+              backdropFilter: "blur(12px)",
+            }}>
+              <textarea
+                ref={textareaRef}
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder="Share what's on your mind..."
+                rows={1}
+                style={{
+                  flex: 1,
+                  background: "transparent",
+                  border: "none",
+                  outline: "none",
+                  resize: "none",
+                  color: "#e2e8f0",
+                  fontSize: "14px",
+                  lineHeight: "1.6",
+                  minHeight: "24px",
+                  maxHeight: "120px",
+                  fontFamily: "inherit",
+                }}
+              />
+              <motion.button
+                onClick={sendMessage}
+                disabled={!input.trim() || isTyping}
+                whileTap={{ scale: 0.92 }}
+                style={{
+                  flexShrink: 0,
+                  width: "32px",
+                  height: "32px",
+                  borderRadius: "10px",
+                  background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
+                  border: "none",
+                  cursor: !input.trim() || isTyping ? "not-allowed" : "pointer",
+                  opacity: !input.trim() || isTyping ? 0.3 : 1,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  marginBottom: "2px",
+                  transition: "opacity 0.2s",
+                }}
+              >
+                <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="white" strokeWidth={2.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
+                </svg>
+              </motion.button>
+            </div>
 
-          <p style={{
-            textAlign: "center",
-            fontSize: "11px",
-            color: "#334155",
-            marginTop: "8px",
-            letterSpacing: "0.02em",
-          }}>
-            Mindspace is not a substitute for professional mental health care
-          </p>
+            <p style={{
+              textAlign: "center",
+              fontSize: "11px",
+              color: "#334155",
+              marginTop: "8px",
+              letterSpacing: "0.02em",
+            }}>
+              Mindspace is not a substitute for professional mental health care
+            </p>
+          </div>
         </div>
-      </div>
+      )}
 
       <BottomNav />
     </div>
