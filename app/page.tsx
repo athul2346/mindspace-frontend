@@ -62,7 +62,7 @@ export default function Home() {
       setLoadingGreeting(false);
     }
   }
-
+  // Handling exit
   function handleExitClose() {
     setMessages([]);
     setInput("");
