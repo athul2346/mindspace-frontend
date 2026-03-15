@@ -67,8 +67,8 @@ export default function Home() {
     setMessages([]);
     setInput("");
     setSessionId(generateSessionId());
-    setShowMoodEntry(true);
     setShowExitRitual(false);
+    setShowMoodEntry(true);
   }
 
   async function sendMessage() {
@@ -108,7 +108,7 @@ export default function Home() {
     return messages[index - 1].role === "user";
   }
 
-  // Mood entry screen
+  // Mood entry screen — exit ritual sits on top of it
   if (showMoodEntry) {
     return (
       <div style={{
@@ -116,6 +116,12 @@ export default function Home() {
         background: "radial-gradient(ellipse at top left, #0f0f2a 0%, #0a0a0f 50%, #0a0f1a 100%)",
       }}>
         <SafetyButton />
+        {showExitRitual && (
+          <ExitRitual
+            sessionId={sessionId}
+            onClose={handleExitClose}
+          />
+        )}
         <MoodEntry onSelect={handleMoodSelect} />
       </div>
     );
@@ -132,7 +138,7 @@ export default function Home() {
     }}>
       <SafetyButton />
 
-      {/* Exit ritual overlay */}
+      {/* Exit ritual sits on top of chat */}
       {showExitRitual && (
         <ExitRitual
           sessionId={sessionId}
@@ -206,7 +212,7 @@ export default function Home() {
         </AnimatePresence>
       </div>
 
-      {/* Chat area — hidden when exit ritual is open */}
+      {/* Chat area */}
       <div style={{ flex: 1, overflowY: "auto", padding: "0 16px 16px" }}>
         <div style={{ maxWidth: "640px", margin: "0 auto", width: "100%" }}>
           {!showExitRitual && (
@@ -229,7 +235,7 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Input bar — hidden when exit ritual is open */}
+      {/* Input bar */}
       {!showExitRitual && (
         <div style={{ flexShrink: 0, padding: "0 16px 90px" }}>
           <div style={{ maxWidth: "640px", margin: "0 auto", width: "100%" }}>
