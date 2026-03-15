@@ -64,11 +64,11 @@ export default function Home() {
   }
 
   function handleExitClose() {
-    setShowExitRitual(false);
     setMessages([]);
     setInput("");
     setSessionId(generateSessionId());
     setShowMoodEntry(true);
+    setShowExitRitual(false);
   }
 
   async function sendMessage() {
