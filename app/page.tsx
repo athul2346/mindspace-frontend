@@ -46,12 +46,14 @@ export default function Home() {
     setShowMoodEntry(false);
     setLoadingGreeting(true);
     try {
+      const hour = new Date().getHours();
       const response = await fetch(API_URL + "/start", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           session_id: sessionId,
           message: mood.context,
+          hour: hour,
         }),
       });
       const data = await response.json();
