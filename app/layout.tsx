@@ -40,6 +40,12 @@ export default function RootLayout({
       </head>
       <body className="bg-mindspace">
         {children}
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            fetch('https://mindspace-backend-quyh.onrender.com/')
+              .catch(() => {});
+          `
+        }} />
       </body>
     </html>
   );
