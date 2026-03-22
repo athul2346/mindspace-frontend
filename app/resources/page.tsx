@@ -255,6 +255,7 @@ export default function ResourcesPage() {
             </motion.div>
           ))}
 
+          {/* Emergency note */}
           <div style={{
             padding: "16px 20px",
             borderRadius: "14px",
@@ -272,6 +273,23 @@ export default function ResourcesPage() {
               If you are in immediate danger, please call your local emergency services.
             </p>
           </div>
+
+          {/* Privacy link */}
+          <p style={{
+            textAlign: "center",
+            fontSize: "12px",
+            color: "#334155",
+            marginTop: "20px",
+          }}>
+            <a href="/privacy" style={{
+              color: "#334155",
+              textDecoration: "underline",
+              fontFamily: "inherit",
+            }}>
+              Privacy Policy
+            </a>
+          </p>
+
         </motion.div>
       </div>
 

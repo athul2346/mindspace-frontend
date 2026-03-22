@@ -306,6 +306,10 @@ export default function Home() {
               letterSpacing: "0.02em",
             }}>
               Mindspace is not a substitute for professional mental health care
+              {" · "}
+              <a href="/privacy" style={{ color: "#334155", textDecoration: "underline" }}>
+                Privacy
+              </a>
             </p>
           </div>
         </div>
