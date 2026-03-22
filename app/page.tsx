@@ -8,6 +8,7 @@ import SafetyButton from "../components/SafetyButton";
 import BottomNav from "../components/BottomNav";
 import MoodEntry from "../components/MoodEntry";
 import ExitRitual from "../components/ExitRitual";
+import SessionSurvey from "../components/SessionSurvey";
 import { API_URL } from "../lib/api";
 
 type Message = {
@@ -27,6 +28,7 @@ export default function Home() {
   const [sessionId, setSessionId] = useState(generateSessionId);
   const [showMoodEntry, setShowMoodEntry] = useState(true);
   const [showExitRitual, setShowExitRitual] = useState(false);
+  const [showSurvey, setShowSurvey] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -110,7 +112,7 @@ export default function Home() {
     return messages[index - 1].role === "user";
   }
 
-  // Mood entry screen — exit ritual sits on top of it
+  // Mood entry screen
   if (showMoodEntry) {
     return (
       <div style={{
@@ -140,7 +142,17 @@ export default function Home() {
     }}>
       <SafetyButton />
 
-      {/* Exit ritual sits on top of chat */}
+      {/* Survey — appears first when wrap up is clicked */}
+      {showSurvey && (
+        <SessionSurvey
+          onDone={() => {
+            setShowSurvey(false);
+            setShowExitRitual(true);
+          }}
+        />
+      )}
+
+      {/* Exit ritual — appears after survey */}
       {showExitRitual && (
         <ExitRitual
           sessionId={sessionId}
@@ -185,15 +197,15 @@ export default function Home() {
           </p>
         </motion.div>
 
-        {/* Wrap up button */}
+        {/* Wrap up button — now opens survey first */}
         <AnimatePresence>
-          {messages.length >= 6 && !showExitRitual && (
+          {messages.length >= 6 && !showExitRitual && !showSurvey && (
             <motion.button
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -10 }}
               transition={{ duration: 0.3 }}
-              onClick={() => setShowExitRitual(true)}
+              onClick={() => setShowSurvey(true)}
               style={{
                 position: "absolute",
                 left: "16px",
@@ -217,7 +229,7 @@ export default function Home() {
       {/* Chat area */}
       <div style={{ flex: 1, overflowY: "auto", padding: "0 16px 16px" }}>
         <div style={{ maxWidth: "640px", margin: "0 auto", width: "100%" }}>
-          {!showExitRitual && (
+          {!showExitRitual && !showSurvey && (
             <>
               {loadingGreeting && <TypingIndicator />}
               <AnimatePresence>
@@ -238,7 +250,7 @@ export default function Home() {
       </div>
 
       {/* Input bar */}
-      {!showExitRitual && (
+      {!showExitRitual && !showSurvey && (
         <div style={{ flexShrink: 0, padding: "0 16px 90px" }}>
           <div style={{ maxWidth: "640px", margin: "0 auto", width: "100%" }}>
             <div style={{
